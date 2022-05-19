@@ -177,7 +177,7 @@ let buyAction = async () => {
 
     const receipt = await tx.wait();
     console.log(`Transaction receipt : https://www.bscscan.com/tx/${receipt.logs[1].transactionHash}`);
-    setTimeout(() => { process.exit() }, 2000);
+//     setTimeout(() => { process.exit() }, 2000);
   } catch (err) {
     let error = JSON.parse(JSON.stringify(err));
     console.log(`Error caused by : 
