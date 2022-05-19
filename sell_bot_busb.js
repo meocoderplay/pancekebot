@@ -49,7 +49,7 @@ const startConnection = () => {
 
   provider._websocket.on('open', () => {
     keepAliveInterval = setInterval(() => {
-      console.log('Checking if the connection is alive, sending a ping')
+//       console.log('Checking if the connection is alive, sending a ping')
 
       provider._websocket.ping()
 
@@ -73,7 +73,7 @@ const startConnection = () => {
   })
 
   provider._websocket.on('pong', () => {
-    console.log('Received pong, so connection is alive, clearing the timeout')
+//     console.log('Received pong, so connection is alive, clearing the timeout')
     clearInterval(pingTimeout)
   })
 }
@@ -139,7 +139,7 @@ let checkLiq = async () => {
   const currentPrice = await getPrice();
   console.log(chalk.bgRedBright(`Current price: ${currentPrice}`));
   const pairAddressx = await factory.getPair(tokenIn, tokenOut);
-  console.log(chalk.blue(`pairAddress: ${pairAddressx}`));
+//   //console.log(chalk.blue(`pairAddress: ${pairAddressx}`));
   if (pairAddressx !== null && pairAddressx !== undefined) {
     // console.log("pairAddress.toString().indexOf('0x0000000000000')", pairAddress.toString().indexOf('0x0000000000000'));
     if (pairAddressx.toString().indexOf('0x0000000000000') > -1) {
@@ -149,15 +149,15 @@ let checkLiq = async () => {
   }
   const pairBNBvalue = await erc.balanceOf(pairAddressx);
   jmlBnb = await ethers.utils.formatEther(pairBNBvalue);
-  console.log(`value BNB : ${jmlBnb}`);
+//   //console.log(`value BNB : ${jmlBnb}`);
 
   if (parseFloat(jmlBnb) > parseFloat(data.minBnb) && currentPrice >= 0.1) {
     setTimeout(() => buyAction(), 3000);
   }
   else {
-    await delay(20000);
+    await delay(5000);
     initialLiquidityDetected = false;
-    console.log(' run again...');
+//     //console.log(' run again...');
     return await run();
   }
 }
