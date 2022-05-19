@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bot": "node bot.js"
+    "bot": "node bot.js",
+    "start": "node sell_bot_busb.js"
   },
   "author": "",
   "license": "ISC",
