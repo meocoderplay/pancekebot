@@ -39,8 +39,47 @@ const mnemonic = process.env.YOUR_MNEMONIC //your memonic;
 const tokenIn = data.to_PURCHASE;
 const tokenOut = data.BNB;
 let provider;
+const EXPECTED_PONG_BACK = 15000
+const KEEP_ALIVE_CHECK_INTERVAL = 7500
+const startConnection = () => {
+  provider = new ethers.providers.WebSocketProvider(wss)
+
+  let pingTimeout = null
+  let keepAliveInterval = null
+
+  provider._websocket.on('open', () => {
+    keepAliveInterval = setInterval(() => {
+      console.log('Checking if the connection is alive, sending a ping')
+
+      provider._websocket.ping()
+
+      // Use `WebSocket#terminate()`, which immediately destroys the connection,
+      // instead of `WebSocket#close()`, which waits for the close timer.
+      // Delay should be equal to the interval at which your server
+      // sends out pings plus a conservative assumption of the latency.
+      pingTimeout = setTimeout(() => {
+        provider._websocket.terminate()
+      }, EXPECTED_PONG_BACK)
+    }, KEEP_ALIVE_CHECK_INTERVAL)
+
+    // TODO: handle contract listeners setup + indexing
+  })
+
+  provider._websocket.on('close', () => {
+    console.log('The websocket connection was closed')
+    clearInterval(keepAliveInterval)
+    clearTimeout(pingTimeout)
+    startConnection()
+  })
+
+  provider._websocket.on('pong', () => {
+    console.log('Received pong, so connection is alive, clearing the timeout')
+    clearInterval(pingTimeout)
+  })
+}
+
 if (connection === '1') {
-  provider = new ethers.providers.WebSocketProvider(wss);
+  startConnection();
 } else {
   provider = new ethers.providers.JsonRpcProvider(rpc);
 }
