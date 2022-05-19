@@ -151,7 +151,7 @@ let checkLiq = async () => {
   jmlBnb = await ethers.utils.formatEther(pairBNBvalue);
   console.log(`value BNB : ${jmlBnb}`);
 
-  if (parseFloat(jmlBnb) > parseFloat(data.minBnb) && currentPrice >= 0.105) {
+  if (parseFloat(jmlBnb) > parseFloat(data.minBnb) && currentPrice >= 0.1) {
     setTimeout(() => buyAction(), 3000);
   }
   else {
